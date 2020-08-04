@@ -1,4 +1,5 @@
 #!/bin/bash
+
 rm data.txt
 echo "Hi" > data.txt
 python servo.py
