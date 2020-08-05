@@ -14,7 +14,7 @@ def tag(url):
 		end_ind = request.find(end)
 		count = request[beg_ind:end_ind]
 		return (int((re.search('\d+', count)).group()))	
-	except TypeError:
+	except AttributeError:
 		return 0
 
 url_tag = 'https://www.instagram.com/explore/tags/Athenalives/?__a=1' #link for hashtag
@@ -23,12 +23,17 @@ url_tag = 'https://www.instagram.com/explore/tags/Athenalives/?__a=1' #link for 
 tags = 0
 tags_prev = 0
 while True:
+	try:
+		f = open('data.txt', 'a')
+		tags_prev = tag(url_tag)
+		time.sleep(2)
+		tags = tag(url_tag)
 
-	f = open('data.txt', 'a')
-	tags_prev = tag(url_tag)
-	time.sleep(2)
-	tags = tag(url_tag)
-	if tags_prev < tags:
-		beats = "Beats_tags!\n"
-		f.write(beats)
-	f.close()
+		if tags_prev < tags:
+			beats = "Beats_tags!\n"
+			f.write(beats)
+
+		f.close()
+
+	except (requests.exceptions.ConnectionError, urllib3.exceptions.MaxRetryError): 
+		time.sleep(10)
